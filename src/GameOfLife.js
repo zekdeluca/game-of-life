@@ -69,6 +69,7 @@ export class GameOfLife {
     }
 
     updateState() {
+        const newState = JSON.parse(JSON.stringify(this.state));
         let stateHasChanged = false;
 
         for (let row = 0; row < this.rowNumber; row++) {
@@ -77,14 +78,18 @@ export class GameOfLife {
                 const newCellState = this.calculateNewCellState(row, column);
 
                 if (originalCellState != newCellState) {
-                    this.state[row][column] = newCellState;
+                    newState[row][column] = newCellState;
 
                     stateHasChanged = true;
                 }
             }
         }
 
-        if (!stateHasChanged) this.markConcluded();
+        if (stateHasChanged) {
+            this.state = newState;
+        } else {
+            this.markConcluded();
+        }
     }
 
     haltIfConcluded() {
